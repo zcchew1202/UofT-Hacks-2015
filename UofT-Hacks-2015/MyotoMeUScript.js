@@ -1,8 +1,9 @@
-var simpleSentences_withColor = function (sentenceNum)
-{
+/*
+Returns the sentence that is matched to the sentenceNum
+*/
+var simpleSentences_withColor = function (sentenceNum){
 
-
-  var sentenceArr = ["Hi", "Bye"]
+  var sentenceArr = ["Hi", "Bye", "How are you doing?", "What are your plans for today?", "What's up?"]
   
   return sentenceArr[sentenceNum];
 }
