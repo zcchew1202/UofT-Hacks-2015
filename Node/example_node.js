@@ -3,10 +3,15 @@
 //first index is counter for actions, second and third index has to do with the interval between actions
 tempArray={
 	"Hi":[0,0], //wave in, wave out: "Hi"
+	"What":[0,0], //wave in, fist: "What are your plans for the weekend?"
+	"Happiness" :[0,0], //wave in, wave out: ":D"
 	"Bye":[0,0], //wave out: "Bye"
 	"How":[0,0], //wave out, wave in: "How are you doing?"
-	"What":[0,0], //wave in, fist: "What are your plans for the weekend?"
-	"Ilu":[0,0], //wave out, fist: "I Love you?" 
+	"Ilu":[0,0], //wave out, fist: "I Love you?"
+	"UofT":[0,0], //spread hands: "#HackitShipIt"
+	"Smug":[0,0], //spread hands, wave in: ":/"
+	"Sadness":[0,0], //spread hands, fist: ":("
+	"Wut":[0,0], //spread hands, wave out, ":F"
 	"rest":0,
 	"fistRest":0
 };
@@ -40,12 +45,11 @@ hub.on('pose', function(pose) {
     	//Fist
         case currentPose.POSE_FIST:
             console.log("fist");
-
             /*
             "What"
             */
-            console.log(tempArray.rest)
-            console.log(tempArray.What[1])
+            //console.log(tempArray.rest)
+            //console.log(tempArray.What[1])
             if(tempArray.What[0] == 1 && (tempArray.rest - tempArray.What[1] <= 100)){
             	console.log("What are you plans for the weekend?");
             	outputString = "What are you plans for the weekend?"
@@ -64,6 +68,18 @@ hub.on('pose', function(pose) {
        			tempArray.Ilu[1] = 0;
             }
             break;
+
+            /*
+           	"Sadness"
+           	*/
+           	//console.log("tempArray.rest = " + tempArray.rest)
+           	//console.log("tempArray.Sadness[1] = " + tempArray.Sadness[1])
+           	if(tempArray.Sadness[0] == 1 && (tempArray.rest - tempArray.Sadness[1] <= 100)){
+            	console.log(":("));
+            	outputString = ":("
+            	tempArray.Sadness[0] = 0;
+            	tempArray.Sadness[1] = 0;
+            }
 
         //Wave in
         case currentPose.POSE_WAVE_IN:
@@ -93,16 +109,17 @@ hub.on('pose', function(pose) {
             }
 
             /*
-           	"How"
+           	"Smug"
            	*/
            	//console.log("tempArray.rest = " + tempArray.rest)
-           	//console.log("tempArray.How[1] = " + tempArray.How[1])
-           	if(tempArray.How[0] == 1 && (tempArray.rest - tempArray.How[1] <= 100)){
-            	console.log("How are you doing?");
-            	outputString = "How are you doing?"
-            	tempArray.How[0] = 0;
-            	tempArray.How[1] = 0;
+           	//console.log("tempArray.Smug[1] = " + tempArray.Smug[1])
+           	if(tempArray.Smug[0] == 1 && (tempArray.rest - tempArray.Smug[1] <= 100)){
+            	console.log(":/");
+            	outputString = ":/"
+            	tempArray.Smug[0] = 0;
+            	tempArray.Smug[1] = 0;
             }
+
 
 
 
@@ -115,8 +132,12 @@ hub.on('pose', function(pose) {
   			/*
 			"Bye"
   			*/
-            console.log("Bye");
-            outputString = "Bye"
+  			//console.log(tempArray.Hi)
+  			if(tempArray.Hi[0] == 0){
+  				console.log("Bye");
+  				outputString = "Bye"
+  			}
+            
   			
 
             /*
@@ -135,11 +156,11 @@ hub.on('pose', function(pose) {
             	tempArray.Ilu[0] = tempArray.Ilu[0] + 1
 
             	tempArray.Ilu[1] = tempArray.rest
-            	console.log(tempArray.Ilu[1])
+            	//console.log(tempArray.Ilu[1])
             }
             else{
             	tempArray.Ilu[1] = tempArray.rest
-            	console.log(tempArray.Ilu[1])
+            	//console.log(tempArray.Ilu[1])
             }
 
             /*
@@ -153,6 +174,18 @@ hub.on('pose', function(pose) {
             	tempArray.How[1] = tempArray.rest;
             }
 
+            /*
+           	"Wut"
+           	*/
+           	//console.log("tempArray.rest = " + tempArray.rest)
+           	//console.log("tempArray.Wut[1] = " + tempArray.Wut[1])
+           	if(tempArray.Wut[0] == 1 && (tempArray.rest - tempArray.Wut[1] <= 100)){
+            	console.log(":F");
+            	outputString = ":F"
+            	tempArray.Wut[0] = 0;
+            	tempArray.Wut[1] = 0;
+            }
+
             
 
 
@@ -160,9 +193,49 @@ hub.on('pose', function(pose) {
 
         //Finger spread
         case currentPose.POSE_FINGERS_SPREAD:
-           	console.log("fingers spreading");
+        /*
+        "Smug":[0,0], //spread hands, wave in: ":/"
+        "Sadness":[0,0], //spread hands, fist: ":("
+        "Wut":[0,0], //spread hands, wave out, ":F"
+        */
 
-           	
+           	console.log("fingers spreading");
+           	console.log("#HackitShipIt");
+
+           	/*
+			"Smug"
+            */
+            if(tempArray.Smug[0] == 0){
+            	tempArray.Smug[0] = tempArray.Smug[0] + 1
+            	tempArray.Smug[1] = tempArray.rest;
+            }
+            else{
+            	tempArray.Smug[1] = tempArray.rest;
+            }
+
+            /*
+			"Sadness"
+            */
+            if(tempArray.Sadness[0] == 0){
+            	tempArray.Sadness[0] = tempArray.Sadness[0] + 1
+            	tempArray.Sadness[1] = tempArray.rest;
+            }
+            else{
+            	tempArray.Sadness[1] = tempArray.rest;
+            }
+
+            /*
+			"Wut"
+            */
+            if(tempArray.Wut[0] == 0){
+            	tempArray.Wut[0] = tempArray.Wut[0] + 1
+            	tempArray.Wut[1] = tempArray.rest;
+            }
+            else{
+            	tempArray.Wut[1] = tempArray.rest;
+            }
+          	
+
            
             break;
 
@@ -192,7 +265,16 @@ hub.on('pose', function(pose) {
 	        }
 	        if(tempArray.Ilu[1] < (tempArray.rest - 100)){
 	        	tempArray.Ilu[1] = 0;
-	        }		     
+	        }	
+	        if(tempArray.Sadness[1] < (tempArray.rest - 100)){
+	        	tempArray.Sadness[1] = 0;
+	        }		
+	        if(tempArrayW.Wut[1] < (tempArray.rest - 100)){
+	        	tempArray.Wut[1] = 0;
+	        }		
+	        if(tempArray.Smug[1] < (tempArray.rest - 100)){
+	        	tempArray.Smug[1] = 0;
+	        }			     
             break;
     }
 
