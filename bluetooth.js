@@ -5,9 +5,25 @@ btSerial.on('found', function(address, name) {
         btSerial.connect(address, channel, function() {
             console.log('connected');
 
-            btSerial.write(new Buffer('bFFFF00', 'utf-8'), function(err, bytesWritten) {
+            var feed;
+            var string='a';
+
+                   setInterval(function() {
+
+    if(string!=feed){
+        feed= string;
+
+     btSerial.write(new Buffer('bFFFFFF'+ feed, 'utf-8'), function(err, bytesWritten) {
                 if (err) console.log(err);
             });
+ }
+
+     console.log(feed);
+
+
+}, 8000);
+
+   
 
             btSerial.on('data', function(buffer) {
                 console.log(buffer.toString('utf-8'));
@@ -17,7 +33,7 @@ btSerial.on('found', function(address, name) {
         });
 
         // close the connection when you're ready
-        btSerial.close();
+      //  btSerial.close();
     }, function() {
         console.log('found nothing');
     });
