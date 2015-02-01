@@ -9,12 +9,14 @@ simpleSentences = function (){
 };
 
 
+//first index is counter for actions, second and third index has to do with the interval between actions
 tempArray={
-	"Hi":0,
-	"Bye":0,
-	"How are you doing?":0,
-	"What are your plans for today?":0,
-	"What's up?":0
+	"Hi":[0,0,0], //wave in, wave out: "Hi"
+	"Bye":[0,0,0], //wave out: "Bye"
+	"How":[0,0,0], //fist, fingers spread: "How are you doing?"
+	"What":[0,0,0], //wave in, fist: "What are your plans for today?"
+	"Whats":[0,0,0], //wave out, fist: "What's up?" 
+	"rest":0
 };
 
 
@@ -43,35 +45,52 @@ hub.on('pose', function(pose) {
     switch(currentPose.type) {
         case currentPose.POSE_FIST:
             console.log("i am making a fist");
+            if(tempArray.Hi[0] == 0){
+            	tempArray.Hi[0] = tempArray.Hi[0] + 1	
+            }
+            if(tempArray.How[0] == 0){
+            	tempArray.How[0] = tempArray.How[0] + 1	
+            }
             break;
         case currentPose.POSE_WAVE_IN:
             console.log("i am making a wave in");
-            if(tempArray.Hi == 0){
-            	tempArray.Hi = tempArray.Hi + 1	
+            if(tempArray.Hi[0] == 0){
+            	tempArray.Hi[0] = tempArray.Hi[0] + 1
+            	tempArray.Hi[1] = tempArray.rest	
+            	//console.log(tempArray.Hi[0]);
             }
-            console.log(tempArray.Hi);
             break;
         case currentPose.POSE_WAVE_OUT:
+        	tempArray.Hi[2] = tempArray.rest;
+        	//console.log("tempArray.Hi[2] = " + tempArray.Hi[2] + " tempArray.Hi[1] = " + tempArray.Hi[1]);
+        	//console.log(tempArray.Hi[2] - tempArray.Hi[1]);
             console.log("i am making a wave out");
-            if(tempArray.Hi == 1){
-            	tempArray.Hi = tempArray.Hi + 1
+            if(tempArray.Hi[0] == 0){
+            	console.log("Bye");
             }
-            console.log(tempArray.Hi);
-            if(tempArray.Hi == 2){
+            if(tempArray.Hi[0] == 1 && (tempArray.Hi[2] - tempArray.Hi[1] <= 35)){
             	console.log("Hi");
-       			tempArray.Hi = 0;
+       			tempArray.Hi[0] = 0;
+       			console.log(tempArray.Hi[0]);
             }
             break;
         case currentPose.POSE_FINGERS_SPREAD:
-           	console.log("i am making a wave in");
+           	console.log("i am making a fingers spreading motion");
+           	if(tempArray.How[0] == 1){
+            	console.log("How are you doing?");
+            	tempArray.How[0] = 0;
+            }
+           
             break;
         case currentPose.POSE_TWIST_IN:
             console.log("i am making a twist in");
             break;
         case currentPose.POSE_NONE:
         default:
-	        if(tempArray.Hi == 2){
-	    		tempArray.Hi = 0;
+	        //console.log("rest")
+	        tempArray.rest = tempArray.rest + 1;
+	        if(tempArray.Hi[1] < (tempArray.rest - 35)){
+	        	tempArray.Hi[0] = 0;
 	        }
 	        //console.log(tempArray.Hi);
             break;
